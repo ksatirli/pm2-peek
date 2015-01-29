@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="peekApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PM2 Dashboard - see PM2 stats at a glance">
+    <meta name="author" content="structed.io">
+    <title>PM2 Peek</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-csp.css" />
+    <link rel="stylesheet" href="assets/css/peek.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+    <script src="assets/js/app.js"></script>
+  </head>
+
+  <body
+    ng-controller="feedController"
+    ng-init="getFeed();"
+  >
+    <div class="container" id="peek-container">
+      <div class="jumbotron">
+        <h1 id="pm2-hostname">
+          {{feedData.system_info.hostname}}
+        </h1>
+        <small id="pm2-loadavg">
+          load: {{feedData.monit.loadavg[0] | number:2}}, {{feedData.monit.loadavg[1] | number:2}}, {{feedData.monit.loadavg[2] | number:2}}
+        </small>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+          <th>PID</th>
+          <th>Process</th>
+          <th>Restarts</th>
+          <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            ng-repeat="item in feedData.processes"
+            class="status-{{item.pm2_env.status}}">
+            <td>{{item.pid}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.pm2_env.restart_time}}</td>
+            <td>{{item.pm2_env.status}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
